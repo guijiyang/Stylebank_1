@@ -61,8 +61,8 @@ class CenterCrop(object):
         if w == tw and h == th:
             return img[0:h,0:w]
 
-        i = (h-th)/2
-        j = (w-tw)/2
+        i = (h-th)//2
+        j = (w-tw)//2
         return img[i:i+th,j:j+tw]
 
 

@@ -13,7 +13,8 @@ class ImageDataset(data.Dataset):
         self.transform = transform
         images = next(os.walk(dataset_dir))[2]
         for img in images:
-            self.image_info.append(os.path.join(dataset_dir, img))
+            if img.endswith('.png') or img.endswith('.jpg') or img.endswith('.jpeg'):
+                self.image_info.append(os.path.join(dataset_dir, img))
     
     def __len__(self):
         return len(self.image_info)
