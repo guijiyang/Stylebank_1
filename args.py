@@ -13,8 +13,8 @@ REG_WEIGHT = 1e-5
 continue_training = True
 
 CONTENT_IMG_DIR = 'coco'
-STYLE_IMG_DIR = 'style_img'
-MODEL_WEIGHT_DIR = 'weights_test'
+STYLE_IMG_DIR = 'style'
+MODEL_WEIGHT_DIR = 'weights'
 BANK_WEIGHT_DIR = os.path.join(MODEL_WEIGHT_DIR, 'bank')
 BANK_WEIGHT_PATH = os.path.join(BANK_WEIGHT_DIR, '{}.pth')
 MODEL_WEIGHT_PATH = os.path.join(MODEL_WEIGHT_DIR, 'model.pth')
