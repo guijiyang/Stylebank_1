@@ -67,8 +67,8 @@ class Normalization(nn.Module):
 		# B is batch size. C is number of channels. H is height and W is width.
 		mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 		std = torch.tensor([0.229, 0.224, 0.225]).to(device)
-		self.mean = torch.tensor(mean).view(-1, 1, 1)
-		self.std = torch.tensor(std).view(-1, 1, 1)
+		self.mean = mean.clone().detach().requires_grad_(False).view(-1, 1, 1)
+		self.std = std.clone().detach().requires_grad_(False).view(-1, 1, 1)
 
 	def forward(self, img):
 		# normalize img
@@ -156,14 +156,14 @@ class LossNetwork(nn.Module):
 			cl.mode = 'learn'
 		for sl in self.style_losses:
 			sl.mode = 'nop'
-		self.model(input) # feed image to vgg19
+		self.model(input) # feed image to vgg16
 	
 	def learn_style(self, input):
 		for cl in self.content_losses:
 			cl.mode = 'nop'
 		for sl in self.style_losses: 
 			sl.mode = 'learn'
-		self.model(input) # feed image to vgg19
+		self.model(input) # feed image to vgg16
 
 	def forward(self, input, content, style):
 		self.learn_content(content)
@@ -173,7 +173,7 @@ class LossNetwork(nn.Module):
 			cl.mode = 'loss'
 		for sl in self.style_losses:
 			sl.mode = 'loss'
-		self.model(input) # feed image to vgg19
+		self.model(input) # feed image to vgg16
 
 		content_loss = 0
 		style_loss = 0

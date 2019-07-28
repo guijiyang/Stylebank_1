@@ -8,10 +8,12 @@ class ImageDataset(data.Dataset):
         dataset_dir: directory of dataset
         transform: dataset transform
     """
-    def  __init__(self, dataset_dir,  transform=None):
+    def  __init__(self, dataset_dir, sorted=False,  transform=None):
         self.image_info = []
         self.transform = transform
         images = next(os.walk(dataset_dir))[2]
+        if sorted:
+            images.sort()
         for img in images:
             if img.endswith('.png') or img.endswith('.jpg') or img.endswith('.jpeg'):
                 self.image_info.append(os.path.join(dataset_dir, img))
