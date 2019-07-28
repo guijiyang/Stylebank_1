@@ -12,7 +12,7 @@ REG_WEIGHT = 1e-5
 
 continue_training = True
 
-CONTENT_IMG_DIR = 'coco'
+CONTENT_IMG_DIR = '/home/guijiyang/dataset/coco/COCO2017/train2017'
 STYLE_IMG_DIR = 'style'
 MODEL_WEIGHT_DIR = 'weights'
 BANK_WEIGHT_DIR = os.path.join(MODEL_WEIGHT_DIR, 'bank')
@@ -26,3 +26,4 @@ K = 1000
 MAX_ITERATION = 300 * K
 ADJUST_LR_ITER = 10 * K
 LOG_ITER = 1 * K
+LR_DECAY=0.8
