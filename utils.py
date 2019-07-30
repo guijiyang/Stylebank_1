@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
+import numpy as np
 import cv2
 import random
 import args
@@ -26,7 +27,8 @@ class Resize(object):
 
     def __call__(self, img):
         m = min(img.shape[0:2])
-        new_size = (int(img.shape[1] / m * self.size),int(img.shape[0] / m * self.size))
+        new_size = (int(img.shape[1] / m * self.size),
+                    int(img.shape[0] / m * self.size))
         return cv2.resize(img, new_size)
 
 
@@ -49,6 +51,21 @@ class RandomCrop(object):
         i, j, h, w = self.get_params(img, self.size)
         return img[i:i+h, j:j+w]
 
+
+class StyleResize(object):
+    def __init__(self, size):
+        self.Resize = Resize(size)
+
+    def __call__(self, img):
+        h, w = img.shape[0:2]
+        # pad image if image width,height ratio is too larger or too small
+        if h < (w*3//5):
+            img = np.pad(img, (((w-h)//2, (w-h)//2),
+                         (0, 0), (0, 0)), mode='reflect')
+        elif h > (w*5//3):
+            img = np.pad(img, (((h-w)//2, (h-w)//2),
+                         (0, 0), (0, 0)), mode='reflect')
+        return self.Resize(img)
 
 class CenterCrop(object):
     def __init__(self, size):
@@ -91,7 +108,7 @@ content_img_transform = transforms.Compose([
 ])
 
 style_img_transform = transforms.Compose([
-    Resize(513),
+    StyleResize(513),
     CenterCrop([513, 513]),
     transforms.ToTensor(),
 ])
