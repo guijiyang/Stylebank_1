@@ -75,16 +75,16 @@ class Normalization(nn.Module):
 		return (img - self.mean) / self.std
 
 # desired depth layers to compute style/content losses :
-content_layers = ['conv_9']
+content_layers = ['relu_9']
 content_weight = {
-	'conv_9': 1
+	'relu_9': 1
 }
-style_layers = [ 'conv_2', 'conv_4', 'conv_6', 'conv_9']
+style_layers = [ 'relu_2', 'relu_4', 'relu_6', 'relu_9']
 style_weight = {
-	'conv_2': 1,
-	'conv_4': 1,
-	'conv_6': 1,
-	'conv_9': 1,
+	'relu_2': 1,
+	'relu_4': 1,
+	'relu_6': 1,
+	'relu_9': 1,
 }
 
 class LossNetwork(nn.Module):

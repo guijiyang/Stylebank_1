@@ -1,7 +1,7 @@
 import os
-import torch.utils.data as data
 import cv2
-
+import numpy as np
+import torch.utils.data as data
 class ImageDataset(data.Dataset):
     """
     Args:
@@ -24,7 +24,7 @@ class ImageDataset(data.Dataset):
     def  __getitem__(self, index):
         image = cv2.imread(self.image_info[index])
         #将BGR转化为RGB通道顺序
-        image=image[:,:,::-1]
+        image=cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if self.transform:
                 image = self.transform(image)
         return image
