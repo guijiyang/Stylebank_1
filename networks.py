@@ -232,13 +232,18 @@ class StyleBankNet(nn.Module):
 	def forward(self, X, style_id=None):
 		z = self.encoder_net(X)
 		if style_id is not None:
-			z=style_forward(z,style_id, self.style_bank)
-		return self.decoder_net(z)
+			style_id=int(style_id)
+			new_z = []
+			zs = style_bank[style_id-1](z[0].view(1, *z[0].shape))
+			new_z.append(zs)
+			new_z = torch.cat(new_z, dim=0)
+			# z=style_forward(z,style_id, self.style_bank)
+		return self.decoder_net(new_z)
 
-@torch.jit.script
-def style_forward(x, style_id, style_bank):
-	style_id=int(style_id)
-	new_z = []
-	zs = style_bank[style_id-1](x[0].view(1, *x[0].shape))
-	new_z.append(zs)
-	return torch.cat(new_z, dim=0)
+# @torch.jit.script
+# def style_forward(x, style_id, style_bank):
+# 	style_id=int(style_id)
+# 	new_z = []
+# 	zs = style_bank[style_id-1](x[0].view(1, *x[0].shape))
+# 	new_z.append(zs)
+# 	return torch.cat(new_z, dim=0)
