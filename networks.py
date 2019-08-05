@@ -7,7 +7,6 @@ import torchvision.models as models
 import args
 
 device = args.device
-vgg16 = models.vgg16(pretrained=True).features.to(device).eval()
 
 class ContentLoss(nn.Module):
 
@@ -91,6 +90,7 @@ class LossNetwork(nn.Module):
 
 	def __init__(self):
 		super(LossNetwork, self).__init__()
+		vgg16 = models.vgg16(pretrained=True).features.to(device).eval()
 		cnn = deepcopy(vgg16)
 		normalization = Normalization().to(device)
 		# just in order to have an iterable access to or list of content/syle
@@ -228,14 +228,17 @@ class StyleBankNet(nn.Module):
 				nn.ReLU(inplace=True)
 			)
 			for i in range(total_style)])
-		
+
 	def forward(self, X, style_id=None):
 		z = self.encoder_net(X)
 		if style_id is not None:
-			new_z = []
-			for idx, i in enumerate(style_id):
-				zs = self.style_bank[i](z[idx].view(1, *z[idx].shape))
-				new_z.append(zs)
-			z = torch.cat(new_z, dim=0)
-			# z = self.bank_net(z)
+			style_forward(z,style_id, self.style_bank)
 		return self.decoder_net(z)
+
+@torch.jit.script
+def style_forward(x, style_id, style_bank):
+	style_id=int(style_id)
+	new_z = []
+	zs = style_bank[style_id-1](x[0].view(1, *x[0].shape))
+	new_z.append(zs)
+	return torch.cat(new_z, dim=0)
