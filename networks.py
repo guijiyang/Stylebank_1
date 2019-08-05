@@ -232,7 +232,7 @@ class StyleBankNet(nn.Module):
 	def forward(self, X, style_id=None):
 		z = self.encoder_net(X)
 		if style_id is not None:
-			style_forward(z,style_id, self.style_bank)
+			z=style_forward(z,style_id, self.style_bank)
 		return self.decoder_net(z)
 
 @torch.jit.script
