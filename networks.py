@@ -234,7 +234,7 @@ class StyleBankNet(nn.Module):
 		if style_id is not None:
 			style_id=int(style_id)
 			new_z = []
-			zs = style_bank[style_id-1](z[0].view(1, *z[0].shape))
+			zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
 			new_z.append(zs)
 			new_z = torch.cat(new_z, dim=0)
 			# z=style_forward(z,style_id, self.style_bank)
