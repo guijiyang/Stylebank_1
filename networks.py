@@ -236,9 +236,8 @@ class StyleBankNet(nn.Module):
 			new_z = []
 			zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
 			new_z.append(zs)
-			new_z = torch.cat(new_z, dim=0)
-			# z=style_forward(z,style_id, self.style_bank)
-		return self.decoder_net(new_z)
+			z = torch.cat(new_z, dim=0)
+		return self.decoder_net(z)
 
 # @torch.jit.script
 # def style_forward(x, style_id, style_bank):
