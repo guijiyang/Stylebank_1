@@ -231,6 +231,7 @@ class StyleBankNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(32, 3, kernel_size=(
                 9, 9), stride=2, padding=(4, 4), bias=False),
+            nn.Sigmoid()
         )
 
         self.style_bank = nn.ModuleList([
@@ -246,6 +247,7 @@ class StyleBankNet(nn.Module):
             )
             for i in range(total_style)])
 
+    # @torch.jit.script_method
     def forward(self, X, style_id=None):
         z = self.encoder_net(X)
         if style_id is not None:
