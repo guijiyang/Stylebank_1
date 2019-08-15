@@ -251,10 +251,15 @@ class StyleBankNet(nn.Module):
     def forward(self, X, style_id=None):
         z = self.encoder_net(X)
         if style_id is not None:
-            style_id = int(style_id)
             new_z = []
-            zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
-            new_z.append(zs)
+            if type(style_id) == list:
+                for idx, sid in enumerate(style_id): 
+                    zs=self.style_bank[sid-1](z[idx].view(1, *z[idx].shape))
+                    new_z.append(zs)
+            else :
+                style_id = int(style_id)
+                zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
+                new_z.append(zs)
             z = torch.cat(new_z, dim=0)
         return self.decoder_net(z)
 
