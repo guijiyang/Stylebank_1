@@ -69,8 +69,14 @@ class Normalization(nn.Module):
         # .view the mean and std to make them [C x 1 x 1] so that they can
         # directly work with image Tensor of shape [B x C x H x W].
         # B is batch size. C is number of channels. H is height and W is width.
-        mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
-        std = torch.tensor([0.229, 0.224, 0.225]).to(device)
+        if 'coco' in args.dataset:
+            mean_vals = [0.471, 0.448, 0.408]
+            std_vals = [0.234, 0.239, 0.242]
+        elif 'imagenet' in args.dataset:
+            mean_vals = [0.485, 0.456, 0.406]
+            std_vals = [0.229, 0.224, 0.225]
+        mean = torch.tensor(mean_vals).to(device)
+        std = torch.tensor(std_vals).to(device)
         self.mean = mean.clone().detach().requires_grad_(False).view(-1, 1, 1)
         self.std = std.clone().detach().requires_grad_(False).view(-1, 1, 1)
 
@@ -253,10 +259,10 @@ class StyleBankNet(nn.Module):
         if style_id is not None:
             new_z = []
             if type(style_id) == list:
-                for idx, sid in enumerate(style_id): 
-                    zs=self.style_bank[sid-1](z[idx].view(1, *z[idx].shape))
+                for idx, sid in enumerate(style_id):
+                    zs = self.style_bank[sid-1](z[idx].view(1, *z[idx].shape))
                     new_z.append(zs)
-            else :
+            else:
                 style_id = int(style_id)
                 zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
                 new_z.append(zs)

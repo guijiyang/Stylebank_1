@@ -61,11 +61,12 @@ class StyleResize(object):
         # pad image if image width,height ratio is too larger or too small
         if h < (w*3//5):
             img = np.pad(img, (((w-h)//2, (w-h)//2),
-                         (0, 0), (0, 0)), mode='reflect')
+                               (0, 0), (0, 0)), mode='reflect')
         elif h > (w*5//3):
             img = np.pad(img, (((h-w)//2, (h-w)//2),
-                         (0, 0), (0, 0)), mode='reflect')
+                               (0, 0), (0, 0)), mode='reflect')
         return self.Resize(img)
+
 
 class CenterCrop(object):
     def __init__(self, size):
@@ -76,11 +77,11 @@ class CenterCrop(object):
         th, tw = self.size
 
         if w == tw and h == th:
-            return img[0:h,0:w]
+            return img[0:h, 0:w]
 
         i = (h-th)//2
         j = (w-tw)//2
-        return img[i:i+th,j:j+tw]
+        return img[i:i+th, j:j+tw]
 
 
 def adjust_learning_rate(optimizer, step):
