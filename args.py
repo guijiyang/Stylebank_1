@@ -26,4 +26,6 @@ K = 1000
 MAX_ITERATION = 300 * K
 ADJUST_LR_ITER = 10 * K
 LOG_ITER = 1 * K
-LR_DECAY=0.8
+LR_DECAY = 0.8
+
+dataset = ['coco']
