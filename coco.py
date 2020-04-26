@@ -26,7 +26,7 @@ class ImageDataset(data.Dataset):
 
         random.seed(1234)
         for i in range(1000):
-            randIndex = int(random.uniform(0, len(image_info)))
+            randIndex = int(random.randint(0, len(image_info)-1))
             self.image_info.append(image_info[randIndex])
             del(image_info[randIndex])
 
