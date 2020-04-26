@@ -19,16 +19,9 @@ class ImageDataset(data.Dataset):
         images = next(os.walk(dataset_dir))[2]
         if sorted:
             images.sort()
-        image_info = []
         for img in images:
             if img.endswith('.png') or img.endswith('.jpg') or img.endswith('.jpeg'):
-                image_info.append(os.path.join(dataset_dir, img))
-
-        random.seed(1234)
-        for i in range(1000):
-            randIndex = int(random.randint(0, len(image_info)-1))
-            self.image_info.append(image_info[randIndex])
-            del(image_info[randIndex])
+                self.image_info.append(os.path.join(dataset_dir, img))
 
     def __len__(self):
         return len(self.image_info)
