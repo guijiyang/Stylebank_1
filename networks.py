@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from torch.nn.modules import Sequential
 import torchvision.models as models
 import args
-
+# import pytorch_lightning as pl
 device = args.device
 
 
@@ -86,16 +86,16 @@ class Normalization(nn.Module):
 
 
 # desired depth layers to compute style/content losses :
-content_layers = ['relu_9']
+content_layers = ['conv_9']
 content_weight = {
-    'relu_9': 1
+    'conv_9': 1
 }
-style_layers = ['relu_2', 'relu_4', 'relu_6', 'relu_9']
+style_layers = ['conv_2', 'conv_4', 'conv_6', 'conv_9']
 style_weight = {
-    'relu_2': 1,
-    'relu_4': 1,
-    'relu_6': 1,
-    'relu_9': 1,
+    'conv_2': 1,
+    'conv_4': 1,
+    'conv_6': 1,
+    'conv_9': 1,
 }
 
 
@@ -237,7 +237,6 @@ class StyleBankNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(32, 3, kernel_size=(
                 9, 9), stride=2, padding=(4, 4), bias=False),
-            nn.Sigmoid()
         )
 
         self.style_bank = nn.ModuleList([
@@ -258,21 +257,9 @@ class StyleBankNet(nn.Module):
         z = self.encoder_net(X)
         if style_id is not None:
             new_z = []
-            if type(style_id) == list:
-                for idx, sid in enumerate(style_id):
-                    zs = self.style_bank[sid-1](z[idx].view(1, *z[idx].shape))
-                    new_z.append(zs)
-            else:
-                style_id = int(style_id)
-                zs = self.style_bank[style_id-1](z[0].view(1, *z[0].shape))
+            for idx, i in enumerate(style_id):
+                zs = self.style_bank[i](z[idx].view(1, *z[idx].shape))
                 new_z.append(zs)
             z = torch.cat(new_z, dim=0)
+            # z = self.bank_net(z)
         return self.decoder_net(z)
-
-# @torch.jit.script
-# def style_forward(x, style_id, style_bank):
-# 	style_id=int(style_id)
-# 	new_z = []
-# 	zs = style_bank[style_id-1](x[0].view(1, *x[0].shape))
-# 	new_z.append(zs)
-# 	return torch.cat(new_z, dim=0)
