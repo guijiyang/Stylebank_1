@@ -1,8 +1,8 @@
 import torch
 import os
 
-device = torch.device("cuda")
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# device = torch.device("cpu")
 batch_size = 4
 lr = 0.001
 T = 2
@@ -12,7 +12,7 @@ REG_WEIGHT = 1e-5
 
 continue_training = True
 
-CONTENT_IMG_DIR = '/home/guijiyang/dataset/coco/COCO2017/train2017'
+CONTENT_IMG_DIR = '/home/guijiyang/download/Coco/coco'
 STYLE_IMG_DIR = 'style'
 MODEL_WEIGHT_DIR = 'weights'
 BANK_WEIGHT_DIR = os.path.join(MODEL_WEIGHT_DIR, 'bank')
